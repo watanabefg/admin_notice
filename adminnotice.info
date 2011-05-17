@@ -1,5 +1,5 @@
 name = "Admin Notice"
-description = ���Ȃ��̊Ǘ��҃��j���[�ɃV�X�e���Ǘ��҂���̂��m�点��\�����܂�
+description = あなたのサイトにシステム管理者からのメッセージを表示します
 core = 6.x
 package = Statistics
 

@@ -1,4 +1,5 @@
 <?php
+// $Id$
 
 /*
  * @file
@@ -59,9 +60,22 @@ function googleanalytics_menu() {
 /**
  * 管理者ページでの表示
  */
-function admin_notice(){
-  $file = 'admin.notice.php';
+function admin_notice() {
+  $path = 'sites/all/admin_notice/admin.notice.php';
+  $filename = file_check_path($path); // $filename = sites/all/admin_notice, $path = admin.notice.php
+  if (($real_path = file_check_location($path, $filename)) != 0) {
+    // ファイルの存在確認OK
+    $fp = fopen($filename.$path, "r") or die("エラー:ファイルが開けません。");
+    // 1行ずつ処理
+    while (!feof($fp)) {
+      $data .= fgets($fp, 4096);
+    }
+    fclose($fp);
+
+    return $data;
+  }
 }
+
 /**
  * Implementation of hook_init().
  */
@@ -77,7 +91,7 @@ function googleanalytics_init() {
 
     // Custom tracking.
     if (variable_get('googleanalytics_trackadsense', FALSE)) {
-      drupal_add_js('window.google_analytics_uacct = ' . drupal_to_js($id) . ';', 'inline', 'header');
+      drupal_add_js('window.google_analytics_uacct = '. drupal_to_js($id) .';', 'inline', 'header');
     }
 
     // Add link tracking.
@@ -116,7 +130,7 @@ function googleanalytics_user($type, $edit, &$account, $category = NULL) {
           '#title' => t('Google Analytics configuration'),
           '#weight' => 3,
           '#collapsible' => TRUE,
-          '#tree' => TRUE
+          '#tree' => TRUE,
         );
 
         switch ($custom) {
@@ -138,7 +152,7 @@ function googleanalytics_user($type, $edit, &$account, $category = NULL) {
           $account->googleanalytics['custom'] = FALSE;
 
           $description .= '<span class="admin-disabled">';
-          $description .= ' ' . t('You have opted out from tracking via browser privacy settings.');
+          $description .= ' '. t('You have opted out from tracking via browser privacy settings.');
           $description .= '</span>';
         }
 
@@ -153,7 +167,6 @@ function googleanalytics_user($type, $edit, &$account, $category = NULL) {
         return $form;
       }
       break;
-
   }
 }
 
@@ -179,7 +192,7 @@ function googleanalytics_preprocess_search_results(&$variables) {
   // found. But the pager item mumber can tell the number of search results.
   global $pager_total_items;
 
-  drupal_add_js('window.googleanalytics_search_results = ' . intval($pager_total_items[0]) . ';', 'inline', 'header');
+  drupal_add_js('window.googleanalytics_search_results = '. intval($pager_total_items[0]) .';', 'inline', 'header');
 }
 
 /**
@@ -189,13 +202,14 @@ function googleanalytics_preprocess_search_results(&$variables) {
  *   The full URL to the external javascript file.
  * @param $sync_cached_file
  *   Synchronize tracking code and update if remote file have changed.
+ *
  * @return mixed
  *   The path to the local javascript file on success, boolean FALSE on failure.
  */
 function _googleanalytics_cache($location, $sync_cached_file = FALSE) {
 
   $path = file_create_path('googleanalytics');
-  $file_destination = $path . '/' . basename($location);
+  $file_destination = $path .'/'. basename($location);
 
   if (!file_exists($file_destination) || $sync_cached_file) {
     // Download the latest tracking code.
@@ -257,6 +271,7 @@ function googleanalytics_clear_js_cache() {
  *
  * @param $account
  *   A user object containing an array of roles to check.
+ *
  * @return boolean
  *   A decision on if the current user is being tracked by Google Analytics.
  */
@@ -279,7 +294,6 @@ function _googleanalytics_visibility_user($account) {
     else {
       $enabled = TRUE;
     }
-
   }
 
   return $enabled;
@@ -292,8 +306,8 @@ function _googleanalytics_visibility_user($account) {
 function _googleanalytics_visibility_roles($account) {
 
   $visibility = variable_get('googleanalytics_visibility_roles', 0);
-  $enabled = $visibility;
-  $roles = variable_get('googleanalytics_roles', array());
+  $enabled    = $visibility;
+  $roles      = variable_get('googleanalytics_roles', array());
 
   if (array_sum($roles) > 0) {
     // One or more roles are selected.
@@ -313,3 +327,4 @@ function _googleanalytics_visibility_roles($account) {
 
   return $enabled;
 }
+
