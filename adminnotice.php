@@ -15,7 +15,7 @@
 function adminnotice_help($path, $arg) {
   switch ($path) {
     case 'admin/settings/adminnotice':
-      return t('Admin Notice ‚Í‚ ‚È‚½‚ÌŠÇ—Ò‰æ–Ê‚ÉƒVƒXƒeƒ€ŠÇ—Ò‚©‚ç‚Ì‚¨’m‚ç‚¹‚ğ•\¦‚µ‚Ü‚·B');
+      return t('Admin Notice ã¯ã‚ãªãŸã®ç®¡ç†è€…ç”»é¢ã«ã‚·ã‚¹ãƒ†ãƒ ç®¡ç†è€…ã‹ã‚‰ã®ãŠçŸ¥ã‚‰ã›ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚');
   }
 }
 
@@ -23,7 +23,7 @@ function adminnotice_help($path, $arg) {
  * Implementation of hook_theme().
  */
 /*
- * ƒe[ƒ}‚Í‚¢‚ç‚È‚¢
+ * ãƒ†ãƒ¼ãƒã¯ã„ã‚‰ãªã„
 function googleanalytics_theme() {
   return array(
     'googleanalytics_admin_custom_var_table' => array(
@@ -46,7 +46,7 @@ function googleanalytics_perm() {
 function googleanalytics_menu() {
   $items['admin/settings/adminnotice'] = array(
     'title' => 'Admin Notice',
-    'description' => 'ƒVƒXƒeƒ€ŠÇ—Ò‚©‚ç‚Ì‚¨’m‚ç‚¹‚ğ•\¦‚µ‚Ä‚¢‚Ü‚·B',
+    'description' => 'ã‚·ã‚¹ãƒ†ãƒ ç®¡ç†è€…ã‹ã‚‰ã®ãŠçŸ¥ã‚‰ã›ã‚’è¡¨ç¤ºã—ã¦ã„ã¾ã™ã€‚',
     'page callback' => 'admin_notice',
     'access callback' => 'user_access',
     'access arguments' => array('administer notice'),
@@ -58,15 +58,16 @@ function googleanalytics_menu() {
 }
 
 /**
- * ŠÇ—Òƒy[ƒW‚Å‚Ì•\¦
+ * ç®¡ç†è€…ãƒšãƒ¼ã‚¸ã§ã®è¡¨ç¤º
  */
 function admin_notice() {
   $path = 'sites/all/admin_notice/admin.notice.php';
-  $filename = file_check_path($path); // $filename = sites/all/admin_notice, $path = admin.notice.php
+  // $filename = sites/all/admin_notice, $path = admin.notice.php
+  $filename = file_check_path($path);
   if (($real_path = file_check_location($path, $filename)) != 0) {
-    // ƒtƒ@ƒCƒ‹‚Ì‘¶İŠm”FOK
-    $fp = fopen($filename.$path, "r") or die("ƒGƒ‰[:ƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚Ü‚¹‚ñB");
-    // 1s‚¸‚Âˆ—
+    // ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨ç¢ºèªOK
+    $fp = fopen($filename . $path, "r") or die("ã‚¨ãƒ©ãƒ¼:ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ã¾ã›ã‚“ã€‚");
+    // 1è¡Œãšã¤å‡¦ç†
     while (!feof($fp)) {
       $data .= fgets($fp, 4096);
     }
