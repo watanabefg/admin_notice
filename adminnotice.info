@@ -1,0 +1,5 @@
+name = "Admin Notice"
+description = あなたの管理者メニューにシステム管理者からのお知らせを表示します
+core = 6.x
+package = Statistics
+
